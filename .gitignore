@@ -1,0 +1,20 @@
+# ==============================#
+#       Build artifacts         #
+# ==============================#
+build/
+
+# Object files
+*.o
+*.obj
+
+# Static libraries
+*.a
+
+# Shared libraries
+*.so
+*.so.*
+
+# ==============================#
+#       Temporary files         #
+# ==============================#
+*.tmp
