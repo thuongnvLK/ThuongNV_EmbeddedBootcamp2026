@@ -6,6 +6,7 @@ build/
 # Object files
 *.o
 *.obj
+*.out
 
 # Static libraries
 *.a
@@ -17,4 +18,3 @@ build/
 # ==============================#
 #       Temporary files         #
 # ==============================#
-*.tmp
