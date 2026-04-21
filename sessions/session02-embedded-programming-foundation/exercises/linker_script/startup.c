@@ -58,9 +58,9 @@ void Reset_Handler(void)
         *dst++ = *src++;
 
     // clear .bss
-    // dst = &_sbss;
-    // while (dst < &_ebss)
-    //     *dst++ = 0;
+    dst = &_sbss;
+    while (dst < &_ebss)
+        *dst++ = 0;
 
     if (reset_flag != MAGIC)
     {
