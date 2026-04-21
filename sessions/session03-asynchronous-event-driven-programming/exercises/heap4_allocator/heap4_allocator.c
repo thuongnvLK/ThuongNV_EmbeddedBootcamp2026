@@ -4,43 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-
-/* Log level */
-#define LOG_LEVEL_NONE 0
-#define LOG_LEVEL_ERROR 1
-#define LOG_LEVEL_WARN 2
-#define LOG_LEVEL_INFO 3
-
-#ifndef LOG_LEVEL
-#define LOG_LEVEL LOG_LEVEL_NONE
-#endif
-
-/* Get short file name */
-#define LOG_FILE_NAME (__builtin_strrchr(__FILE__, '/') ? __builtin_strrchr(__FILE__, '/') + 1 : __FILE__)
-
-/* Base macro */
-#define LOG_BASE(level_str, fmt, ...)    \
-    printf("[%s] %s:%d:%s(): " fmt "\n", \
-           level_str, LOG_FILE_NAME, __LINE__, __func__, ##__VA_ARGS__)
-
-/* Log macros */
-#if LOG_LEVEL >= LOG_LEVEL_ERROR
-#define LOG_ERROR(fmt, ...) LOG_BASE("ERROR", fmt, ##__VA_ARGS__)
-#else
-#define LOG_ERROR(...) ((void)0)
-#endif
-
-#if LOG_LEVEL >= LOG_LEVEL_WARN
-#define LOG_WARN(fmt, ...) LOG_BASE("WARN ", fmt, ##__VA_ARGS__)
-#else
-#define LOG_WARN(...) ((void)0)
-#endif
-
-#if LOG_LEVEL >= LOG_LEVEL_INFO
-#define LOG_INFO(fmt, ...) LOG_BASE("INFO ", fmt, ##__VA_ARGS__)
-#else
-#define LOG_INFO(...) ((void)0)
-#endif
+#include "os_log.h"
 
 #define HEAP_ALIGNMENT_BYTES 4U
 #define HEAP_ALIGNMENT_MASK (HEAP_ALIGNMENT_BYTES - 1U)
@@ -211,17 +175,17 @@ void *pHeapMalloc(size_t xWantedSize)
                 if (ADD_WILL_OVERFLOW(xWantedSize, xAdditionalRequiredSize) == 0)
                 {
                     xWantedSize += xAdditionalRequiredSize;
-                    LOG_INFO("Final size after alignment: %u", xWantedSize);
+                    LOG_DBG("Final size after alignment: %u", xWantedSize);
                 }
                 else
                 {
                     xWantedSize = 0U;
-                    LOG_ERROR("Memory allocation failed: overflow occurred during alignment padding");
+                    LOG_WARN("Memory allocation failed: overflow occurred during alignment padding");
                 }
             }
             else
             {
-                LOG_INFO("No alignment required. Size after alignment: %u", xWantedSize);
+                LOG_DBG("No alignment required. Size after alignment: %u", xWantedSize);
             }
         }
         else
@@ -268,7 +232,7 @@ void *pHeapMalloc(size_t xWantedSize)
                     }
                     else
                     {
-                        LOG_INFO("No split performed. Remaining size too small, allocaterd entire block: %u", pxCurrentBlock->xBlockSize);
+                        LOG_DBG("No split performed. Remaining size too small, allocaterd entire block: %u", pxCurrentBlock->xBlockSize);
                     }
 
                     if (pxPreviousBlock == NULL)
@@ -341,31 +305,27 @@ void *pHeapFree(void *pvPointerName)
 void heapPrintBlocks(void)
 {
 
-    uint8_t *ptr = g_u8Heap;
-    uint8_t *end = g_u8Heap + configADJUSTED_HEAP_SIZE;
+    uint8_t *pu8CurrentBlock = g_u8Heap;
+    uint8_t *pu8End = g_u8Heap + configADJUSTED_HEAP_SIZE;
 
-    printf("\n[HEAP BLOCKS]\n");
+    LOG_DBG("\n[HEAP BLOCKS]\n");
 
-    while (ptr < end)
+    while (pu8CurrentBlock < pu8End)
     {
-        Block_t *blk = (Block_t *)ptr;
+        Block_t *pxBlock = (Block_t *)pu8CurrentBlock;
 
-        size_t raw = blk->xBlockSize;
-        size_t size = raw & ~BLOCK_ALLOCATED_BITMASK;
-        int isAlloc = (raw & BLOCK_ALLOCATED_BITMASK) != 0;
+        size_t xBlockSize = pxBlock->xBlockSize;
+        size_t xSize = xBlockSize & ~BLOCK_ALLOCATED_BITMASK;
 
-        if (size == 0 || size > configADJUSTED_HEAP_SIZE)
+        if (xSize == 0 || xSize > configADJUSTED_HEAP_SIZE)
         {
-            printf("[ERROR] Corrupted at %p\n", blk);
+            LOG_WARN("Corrupted at %p", pxBlock);
             break;
         }
 
-        printf("addr=%p | size=%-4zu | %s\n",
-               blk,
-               size,
-               isAlloc ? "ALLOC" : "FREE");
+        LOG_DBG("addr=%p | size=%-4zu | %s\n",pxBlock, xSize,  BLOCK_IS_ALLOCATED(pxBlock) ? "ALLOC" : "FREE");
 
-        ptr += size;
+        pu8CurrentBlock += xSize;
     }
 }
 
@@ -373,25 +333,23 @@ void heapPrintFreeList(void)
 {
     extern Block_t *g_pxFreeListHead;
 
-    printf("\n[FREE LIST]\n");
+    LOG_DBG("\n[FREE LIST]\n");
 
-    Block_t *curr = g_pxFreeListHead;
+    Block_t *pxCurrentBlock = g_pxFreeListHead;
 
-    while (curr != NULL)
+    while (pxCurrentBlock != NULL)
     {
-        printf("%p (%zu) -> ",
-               curr,
-               curr->xBlockSize & ~BLOCK_ALLOCATED_BITMASK);
+        LOG_DBG("%p (%zu) -> ", pxCurrentBlock, FREE_BLOCK(pxCurrentBlock));
 
-        curr = curr->pNextFreeBlock;
+        pxCurrentBlock = pxCurrentBlock->pNextFreeBlock;
     }
 
-    printf("NULL\n");
+    LOG_DBG("NULL\n");
 }
 
 static void printSeparator(const char *title)
 {
-    printf("\n================ %s ================\n", title);
+    LOG_DBG("\n================ %s ================\n", title);
 }
 int main(void)
 {
@@ -499,13 +457,13 @@ int main(void)
     /* TEST 10: ALLOC SIZE = 0 */
     /* ============================= */
     void *z = pHeapMalloc(0);
-    printf("\nALLOC size 0 -> %p (expect NULL)\n", z);
+    LOG_DBG("\nALLOC size 0 -> %p (expect NULL)\n", z);
 
     /* ============================= */
     /* TEST 11: ALLOC TOO LARGE */
     /* ============================= */
     void *big = pHeapMalloc(configTOTAL_HEAP_SIZE * 2);
-    printf("\nALLOC too large -> %p (expect NULL)\n", big);
+    LOG_DBG("\nALLOC too large -> %p (expect NULL)\n", big);
 
     /* ============================= */
     /* TEST 12: DOUBLE FREE */
