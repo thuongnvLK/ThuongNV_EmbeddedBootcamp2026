@@ -1,45 +1,4 @@
-#include <stdio.h>
-#include <stdint.h>
-
-#include <stdio.h>
-#include <string.h>
-#include <stdbool.h>
-#include "os_log.h"
-
-#define HEAP_ALIGNMENT_BYTES 4U
-#define HEAP_ALIGNMENT_MASK (HEAP_ALIGNMENT_BYTES - 1U)
-#define BITS_PER_BYTE ((size_t)8)
-#define BLOCK_ALLOCATED_BITMASK (((size_t)1) << ((sizeof(size_t) * BITS_PER_BYTE) - 1))
-#define BLOCK_SIZE_IS_VALID(xBlockSize) (((xBlockSize) & BLOCK_ALLOCATED_BITMASK) == 0)
-#define ADD_WILL_OVERFLOW(a, b) ((a) > (SIZE_MAX - (b)))
-#define BLOCK_IS_ALLOCATED(pxBlock) (((pxBlock->xBlockSize) & BLOCK_ALLOCATED_BITMASK) != 0)
-#define ALLOCATE_BLOCK(pxBlock) ((pxBlock->xBlockSize) |= BLOCK_ALLOCATED_BITMASK)
-#define FREE_BLOCK(pxBlock) ((pxBlock->xBlockSize) &= ~(BLOCK_ALLOCATED_BITMASK))
-#define configTOTAL_HEAP_SIZE 4096
-#define configADJUSTED_HEAP_SIZE (configTOTAL_HEAP_SIZE - HEAP_ALIGNMENT_BYTES)
-
-typedef struct Block_t
-{
-    struct Block_t *pNextFreeBlock;
-    size_t xBlockSize;
-} Block_t;
-
-static uint8_t g_u8Heap[configTOTAL_HEAP_SIZE];
-
-// Round up the size of Block_t (heap block header) to the nearest multiple of the alignment.
-static const size_t g_xHeapStructSize = (sizeof(Block_t) + ((size_t)(HEAP_ALIGNMENT_BYTES - 1))) & ~((size_t)(HEAP_ALIGNMENT_MASK));
-
-#define MINIMUM_BLOCK_SIZE ((size_t)(g_xHeapStructSize << 1))
-
-static size_t g_xFreeBytesRemaining = (size_t)0U;
-static size_t g_xMinimumEverFreeBytesRemaining = (size_t)0U;
-static size_t g_xNumberOfSuccessfulAllocations = (size_t)0U;
-static size_t g_xNumberOfSuccessfulFrees = (size_t)0U;
-static bool g_xHeapHasBeenInitialised = false;
-
-static Block_t g_xStart;
-static Block_t *g_pxEnd = NULL;
-static Block_t *g_pxFreeListHead = NULL;
+#include "heap4_allocator.h"
 
 static void HeapInit(void)
 {
@@ -308,7 +267,7 @@ void heapPrintBlocks(void)
     uint8_t *pu8CurrentBlock = g_u8Heap;
     uint8_t *pu8End = g_u8Heap + configADJUSTED_HEAP_SIZE;
 
-    LOG_DBG("\n[HEAP BLOCKS]\n");
+    LOG_DBG("[HEAP BLOCKS]");
 
     while (pu8CurrentBlock < pu8End)
     {
@@ -323,7 +282,7 @@ void heapPrintBlocks(void)
             break;
         }
 
-        LOG_DBG("addr=%p | size=%-4zu | %s\n",pxBlock, xSize,  BLOCK_IS_ALLOCATED(pxBlock) ? "ALLOC" : "FREE");
+        LOG_DBG("addr=%p | size=%-4zu | %s",pxBlock, xSize,  BLOCK_IS_ALLOCATED(pxBlock) ? "ALLOC" : "FREE");
 
         pu8CurrentBlock += xSize;
     }
@@ -333,7 +292,7 @@ void heapPrintFreeList(void)
 {
     extern Block_t *g_pxFreeListHead;
 
-    LOG_DBG("\n[FREE LIST]\n");
+    LOG_DBG("[FREE LIST]");
 
     Block_t *pxCurrentBlock = g_pxFreeListHead;
 
@@ -344,176 +303,11 @@ void heapPrintFreeList(void)
         pxCurrentBlock = pxCurrentBlock->pNextFreeBlock;
     }
 
-    LOG_DBG("NULL\n");
+    LOG_DBG("NULL");
 }
 
-static void printSeparator(const char *title)
+void printSeparator(const char *title)
 {
-    LOG_DBG("\n================ %s ================\n", title);
+    LOG_DBG("================ %s ================", title);
 }
-int main(void)
-{
-    printSeparator("INIT (trigger lazy init)");
-    void *tmp = pHeapMalloc(1);
-    pHeapFree(tmp);
-    heapPrintBlocks();
-    heapPrintFreeList();
 
-    /* ============================= */
-    /* TEST 1: BASIC SPLIT */
-    /* ============================= */
-    void *p1 = pHeapMalloc(100);
-    void *p2 = pHeapMalloc(200);
-
-    printSeparator("AFTER MALLOC p1(100), p2(200)");
-    heapPrintBlocks();
-    heapPrintFreeList();
-
-    /* ============================= */
-    /* TEST 2: FREE + NO MERGE */
-    /* ============================= */
-    pHeapFree(p1);
-
-    printSeparator("FREE p1 (no merge)");
-    heapPrintBlocks();
-    heapPrintFreeList();
-
-    /* ============================= */
-    /* TEST 3: MERGE WITH NEXT */
-    /* ============================= */
-    pHeapFree(p2);
-
-    printSeparator("FREE p2 (merge with p1)");
-    heapPrintBlocks();
-    heapPrintFreeList();
-
-    /* ============================= */
-    /* TEST 4: SPLIT AGAIN */
-    /* ============================= */
-    void *a = pHeapMalloc(100);
-    void *b = pHeapMalloc(100);
-    void *c = pHeapMalloc(100);
-
-    printSeparator("ALLOC a b c");
-    heapPrintBlocks();
-    heapPrintFreeList();
-
-    /* ============================= */
-    /* TEST 5: FREE MIDDLE (NO MERGE) */
-    /* ============================= */
-    pHeapFree(b);
-
-    printSeparator("FREE b (no merge)");
-    heapPrintBlocks();
-    heapPrintFreeList();
-
-    /* ============================= */
-    /* TEST 6: MERGE BOTH SIDES */
-    /* ============================= */
-    pHeapFree(a);
-    pHeapFree(c);
-
-    printSeparator("FREE a + c (merge all)");
-    heapPrintBlocks();
-    heapPrintFreeList();
-
-    /* ============================= */
-    /* TEST 7: REUSE FREED BLOCK */
-    /* ============================= */
-    void *d = pHeapMalloc(250);
-
-    printSeparator("ALLOC d(250) reuse merged block");
-    heapPrintBlocks();
-    heapPrintFreeList();
-
-    /* ============================= */
-    /* TEST 8: FRAGMENTATION */
-    /* ============================= */
-    void *arr[10];
-
-    for (int i = 0; i < 10; i++)
-        arr[i] = pHeapMalloc(50);
-
-    for (int i = 0; i < 10; i += 2)
-        pHeapFree(arr[i]);
-
-    printSeparator("FRAGMENTATION");
-    heapPrintBlocks();
-    heapPrintFreeList();
-
-    /* ============================= */
-    /* TEST 9: FULL MERGE AFTER STRESS */
-    /* ============================= */
-    for (int i = 1; i < 10; i += 2)
-        pHeapFree(arr[i]);
-
-    pHeapFree(d);
-
-    printSeparator("FULL MERGE AFTER STRESS");
-    heapPrintBlocks();
-    heapPrintFreeList();
-
-    /* ============================= */
-    /* TEST 10: ALLOC SIZE = 0 */
-    /* ============================= */
-    void *z = pHeapMalloc(0);
-    LOG_DBG("\nALLOC size 0 -> %p (expect NULL)\n", z);
-
-    /* ============================= */
-    /* TEST 11: ALLOC TOO LARGE */
-    /* ============================= */
-    void *big = pHeapMalloc(configTOTAL_HEAP_SIZE * 2);
-    LOG_DBG("\nALLOC too large -> %p (expect NULL)\n", big);
-
-    /* ============================= */
-    /* TEST 12: DOUBLE FREE */
-    /* ============================= */
-    void *df = pHeapMalloc(100);
-    pHeapFree(df);
-
-    printSeparator("DOUBLE FREE TEST");
-    pHeapFree(df);
-    heapPrintBlocks();
-    heapPrintFreeList();
-
-    /* ============================= */
-    /* TEST 13: INVALID POINTER FREE */
-    /* ============================= */
-    int x;
-    printSeparator("INVALID FREE TEST");
-    pHeapFree(&x);
-    heapPrintBlocks();
-    heapPrintFreeList();
-
-    /* ============================= */
-    /* TEST 14: RANDOM ALLOC/FREE */
-    /* ============================= */
-    printSeparator("RANDOM STRESS");
-
-    void *randArr[20];
-
-    for (int i = 0; i < 20; i++)
-        randArr[i] = pHeapMalloc((i % 5 + 1) * 30);
-
-    for (int i = 0; i < 20; i += 3)
-        pHeapFree(randArr[i]);
-
-    for (int i = 1; i < 20; i += 4)
-        pHeapFree(randArr[i]);
-
-    heapPrintBlocks();
-    heapPrintFreeList();
-
-    /* ============================= */
-    /* TEST 15: FREE ALL */
-    /* ============================= */
-    for (int i = 0; i < 20; i++)
-        pHeapFree(randArr[i]);
-
-    printSeparator("FINAL FULL MERGE");
-    heapPrintBlocks();
-    heapPrintFreeList();
-
-    printSeparator("DONE");
-    return 0;
-}
