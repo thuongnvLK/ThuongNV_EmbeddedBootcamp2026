@@ -19,3 +19,10 @@
 | Session 13 | Kernel Data Structures & Tasks |
 | Session 14 | Task States & Synchronization |
 | Session 15 | Communication, Timer & Benchmark |
+
+## 2. Exercises
+
+### 2.1. Session 2
+- [Linker Script](./sessions/session02-embedded-programming-foundation/notes.md)
+### 2.2. Session 3
+- [Heap](./sessions/session03-asynchronous-event-driven-programming/notes.md)
