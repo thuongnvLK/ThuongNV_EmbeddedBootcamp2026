@@ -26,3 +26,5 @@
 - [Linker Script](./sessions/session02-embedded-programming-foundation/notes.md)
 ### 2.2. Session 3
 - [Heap](./sessions/session03-asynchronous-event-driven-programming/notes.md)
+### 2.3. Session 4
+- [Command line](./sessions/session04-practice-using-active-kernel-AK/notes.md)
