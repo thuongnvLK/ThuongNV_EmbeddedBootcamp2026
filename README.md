@@ -28,3 +28,19 @@
 - [Heap](./sessions/session03-asynchronous-event-driven-programming/notes.md)
 ### 2.3. Session 4
 - [Command line](./sessions/session04-practice-using-active-kernel-AK/notes.md)
+
+<!---LeetCode Topics Start-->
+# LeetCode Topics
+## Array
+| Problem Name | Difficulty |
+| ------- | ------- |
+| [0088-merge-sorted-array](https://github.com/thuongnvLK/ThuongNV_EmbeddedBootcamp2026/tree/main/0088-merge-sorted-array/) | Easy |
+## Two Pointers
+| Problem Name | Difficulty |
+| ------- | ------- |
+| [0088-merge-sorted-array](https://github.com/thuongnvLK/ThuongNV_EmbeddedBootcamp2026/tree/main/0088-merge-sorted-array/) | Easy |
+## Sorting
+| Problem Name | Difficulty |
+| ------- | ------- |
+| [0088-merge-sorted-array](https://github.com/thuongnvLK/ThuongNV_EmbeddedBootcamp2026/tree/main/0088-merge-sorted-array/) | Easy |
+<!---LeetCode Topics End-->
