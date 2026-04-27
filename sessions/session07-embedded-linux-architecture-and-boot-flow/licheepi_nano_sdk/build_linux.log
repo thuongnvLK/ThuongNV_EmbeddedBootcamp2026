@@ -1,0 +1,7 @@
+  CALL    scripts/atomic/check-atomics.sh
+  CALL    scripts/checksyscalls.sh
+  CHK     include/generated/compile.h
+  Kernel: arch/arm/boot/Image is ready
+  Building modules, stage 2.
+  MODPOST 4 modules
+  Kernel: arch/arm/boot/zImage is ready

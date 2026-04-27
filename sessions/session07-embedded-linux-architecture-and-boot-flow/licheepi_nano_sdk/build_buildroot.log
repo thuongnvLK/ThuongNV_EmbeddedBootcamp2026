@@ -1,0 +1,181 @@
+/usr/bin/make -j1 O=/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output HOSTCC="/usr/bin/gcc" HOSTCXX="/usr/bin/g++" syncconfig
+make[1]: warning: -j1 forced in submake: resetting jobserver mode.
+make[1]: Entering directory '/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3'
+make[1]: Leaving directory '/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3'
+[7m>>>   Finalizing host directory[27m
+[7m>>>   Finalizing target directory[27m
+mkdir -p /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/etc/meson
+sed -e 's%@TARGET_CROSS@%/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin/arm-buildroot-linux-gnueabi-%g' -e 's%@TARGET_ARCH@%arm%g' -e 's%@TARGET_CPU@%arm926ej-s%g' -e 's%@TARGET_ENDIAN@%little%g' -e "s%@TARGET_CFLAGS@%'-D_LARGEFILE_SOURCE', '-D_LARGEFILE64_SOURCE', '-D_FILE_OFFSET_BITS=64', '-Os'@PKG_TARGET_CFLAGS@%g" -e "s%@TARGET_LDFLAGS@%@PKG_TARGET_CFLAGS@%g" -e "s%@TARGET_CXXFLAGS@%'-D_LARGEFILE_SOURCE', '-D_LARGEFILE64_SOURCE', '-D_FILE_OFFSET_BITS=64', '-Os'@PKG_TARGET_CFLAGS@%g" -e 's%@HOST_DIR@%/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host%g' -e 's%@STAGING_DIR@%/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/arm-buildroot-linux-gnueabi/sysroot%g' -e 's%@STATIC@%false%g' package/meson//cross-compilation.conf.in > /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/etc/meson/cross-compilation.conf.in
+sed -e 's%@PKG_TARGET_CFLAGS@%%g' -e 's%@PKG_TARGET_LDFLAGS@%%g' -e 's%@PKG_TARGET_CXXFLAGS@%%g' /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/etc/meson/cross-compilation.conf.in > /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/etc/meson/cross-compilation.conf
+/usr/bin/sed -i -e '/# GENERIC_SERIAL$/s~^.*#~console::respawn:/sbin/getty -L  console 0 vt100 #~' /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc/inittab
+/usr/bin/sed -i -e '/^#.*-o remount,rw \/$/s~^#\+~~' /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc/inittab
+if grep -q CONFIG_ASH=y /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/busybox-1.33.0/.config; then grep -qsE '^/bin/ash$' /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc/shells || echo "/bin/ash" >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc/shells; fi
+if grep -q CONFIG_HUSH=y /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/busybox-1.33.0/.config; then grep -qsE '^/bin/hush$' /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc/shells || echo "/bin/hush" >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc/shells; fi
+mkdir -p /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc
+echo "Fanning-f1c100s" > /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc/hostname
+/usr/bin/sed -i -e '$a \127.0.1.1\tFanning-f1c100s' -e '/^127.0.1.1/d' /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc/hosts
+mkdir -p /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc
+echo "Welcome to Fanning" > /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc/issue
+/usr/bin/sed -i -e s,^root:[^:]*:,root:"`/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin/mkpasswd -m "sha-256" "000"`":, /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc/shadow
+grep -qsE '^/bin/sh$' /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc/shells || echo "/bin/sh" >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc/shells
+if [ -x /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/sbin/swapon -a -x /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/sbin/swapoff ]; then /usr/bin/sed -i -e '/^#.*\/sbin\/swap/s/^#\+[[:blank:]]*//' /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc/inittab; else /usr/bin/sed -i -e '/^[^#].*\/sbin\/swap/s/^/#/' /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc/inittab; fi
+printf '%s\n' C en_US locale-archive > /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/locales.nopurge
+for dir in /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/share/locale /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/share/X11/locale /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/lib/locale; do if [ ! -d $dir ]; then continue; fi; for langdir in $dir/*; do if [ -e "${langdir}" ]; then grep -qx "${langdir##*/}" /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/locales.nopurge || rm -rf $langdir; fi done; done
+if [ -d /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/share/X11/locale ]; then for lang in C en_US; do if [ -f /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/share/X11/locale/$lang/XLC_LOCALE ]; then echo "$lang/XLC_LOCALE: $lang"; fi done > /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/share/X11/locale/locale.dir; fi
+rm -rf /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/include /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/share/aclocal \
+	/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/lib/pkgconfig /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/share/pkgconfig \
+	/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/lib/cmake /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/share/cmake \
+	/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/doc
+find /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/{lib,share}/ -name '*.cmake' -print0 | xargs -0 rm -f
+find /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/lib/ /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/lib/ /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/libexec/ \
+	\( -name '*.a' -o -name '*.la' -o -name '*.prl' \) -print0 | xargs -0 rm -f
+find: '/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/libexec/': No such file or directory
+rm -rf /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/share/gdb
+rm -rf /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/share/bash-completion
+rm -rf /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc/bash_completion.d
+rm -rf /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/share/zsh
+rm -rf /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/man /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/share/man
+rm -rf /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/info /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/share/info
+rm -rf /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/doc /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/share/doc
+rm -rf /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/share/gtk-doc
+rmdir /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/share 2>/dev/null || true
+rm -rf /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/lib/debug /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/lib/debug
+find /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target   -type f \( -perm /111 -o -name '*.so*' \) -not \( -name 'libpthread*.so*' -o -name 'ld-*.so*' -o -name '*.ko' \) -print0 | xargs -0 /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin/arm-buildroot-linux-gnueabi-strip --remove-section=.comment --remove-section=.note 2>/dev/null || true
+find /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target   \( -name 'ld-*.so*' -o -name 'libpthread*.so*' \) -print0 | xargs -0 -r /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin/arm-buildroot-linux-gnueabi-strip --remove-section=.comment --remove-section=.note --strip-debug 2>/dev/null || true
+test -f /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc/ld.so.conf && \
+	{ echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
+test -d /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc/ld.so.conf.d && \
+	{ echo "ERROR: we shouldn't have a /etc/ld.so.conf.d directory"; exit 1; } || true
+mkdir -p /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc
+( \
+	echo "NAME=Buildroot"; \
+	echo "VERSION=-g27cc4dd-dirty"; \
+	echo "ID=buildroot"; \
+	echo "VERSION_ID=2021.02.3"; \
+	echo "PRETTY_NAME=\"Buildroot 2021.02.3\"" \
+) >  /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr/lib/os-release
+ln -sf ../usr/lib/os-release /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/etc
+[7m>>>   Sanitizing RPATH in target tree[27m
+PER_PACKAGE_DIR=/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/per-package /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/support/scripts/fix-rpath target
+touch /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/usr
+[7m>>>   Generating root filesystems common tables[27m
+rm -rf /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs
+mkdir -p /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs
+printf '   	named -1 named -1 * /etc/bind - - BIND daemon\n 	dhcpcd -1 dhcpcd -1 * - - - dhcpcd user\n\n' >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/full_users_table.txt
+printf '   	/bin/busybox                     f 4755 0  0 - - - - -\n\n' > /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/full_devices_table.txt
+cat system/device_table.txt >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/full_devices_table.txt
+[7m>>>   Generating filesystem image rootfs.ext2[27m
+mkdir -p /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/images
+rm -rf /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/ext2
+mkdir -p /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/ext2
+rsync -auH --exclude=/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/ /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/ext2/target
+echo '#!/bin/sh' > /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/ext2/fakeroot
+echo "set -e" >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/ext2/fakeroot
+echo "chown -h -R 0:0 /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/ext2/target" >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/ext2/fakeroot
+PATH="/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin:/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/sbin:/workspace/licheepi_nano_sdk/toolchain/gcc-linaro-7.4.1-2019.02-x86_64_arm-linux-gnueabi/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin" /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/support/scripts/mkusers /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/full_users_table.txt /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/ext2/target >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/ext2/fakeroot
+echo "/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin/makedevs -d /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/full_devices_table.txt /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/ext2/target" >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/ext2/fakeroot
+printf '   \n' >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/ext2/fakeroot
+printf '   \n' >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/ext2/fakeroot
+printf '   	rm -f /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/images/rootfs.ext2\n	/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/sbin/mkfs.ext4 -d /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/ext2/target -r 1 -N 0 -m 5 -L "rootfs" -O ^64bit /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/images/rootfs.ext2 "100M" || { ret=$?; echo "*** Maybe you need to increase the filesystem size (BR2_TARGET_ROOTFS_EXT2_SIZE)" 1>&2; exit $ret; }\n' >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/ext2/fakeroot
+chmod a+x /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/ext2/fakeroot
+PATH="/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin:/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/sbin:/workspace/licheepi_nano_sdk/toolchain/gcc-linaro-7.4.1-2019.02-x86_64_arm-linux-gnueabi/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin" FAKEROOTDONTTRYCHOWN=1 /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin/fakeroot -- /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/ext2/fakeroot
+rootdir=/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/ext2/target
+table='/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/full_devices_table.txt'
+mke2fs 1.45.6 (20-Mar-2020)
+Creating regular file /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/images/rootfs.ext2
+64-bit filesystem support is not enabled.  The larger fields afforded by this feature enable full-strength checksumming.  Pass -O 64bit to rectify.
+Creating filesystem with 102400 1k blocks and 25688 inodes
+Filesystem UUID: b0a36a89-944c-408a-b3ad-f5d55dffd056
+Superblock backups stored on blocks: 
+	8193, 24577, 40961, 57345, 73729
+
+Allocating group tables:  0/13     done                            
+Writing inode tables:  0/13     done                            
+Creating journal (4096 blocks): done
+Copying files into the device: done
+Writing superblocks and filesystem accounting information:  0/13     done
+
+ln -sf rootfs.ext2 /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/images/rootfs.ext4
+[7m>>>   Generating filesystem image rootfs.jffs2[27m
+mkdir -p /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/images
+rm -rf /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/jffs2
+mkdir -p /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/jffs2
+rsync -auH --exclude=/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/ /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/jffs2/target
+echo '#!/bin/sh' > /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/jffs2/fakeroot
+echo "set -e" >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/jffs2/fakeroot
+echo "chown -h -R 0:0 /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/jffs2/target" >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/jffs2/fakeroot
+PATH="/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin:/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/sbin:/workspace/licheepi_nano_sdk/toolchain/gcc-linaro-7.4.1-2019.02-x86_64_arm-linux-gnueabi/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin" /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/support/scripts/mkusers /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/full_users_table.txt /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/jffs2/target >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/jffs2/fakeroot
+echo "/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin/makedevs -d /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/full_devices_table.txt /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/jffs2/target" >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/jffs2/fakeroot
+printf '   \n' >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/jffs2/fakeroot
+printf '   \n' >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/jffs2/fakeroot
+printf '   	/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/sbin/mkfs.jffs2 -e 0x100 --with-xattr -l -d /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/jffs2/target -o /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/images/rootfs.jffs2\n' >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/jffs2/fakeroot
+chmod a+x /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/jffs2/fakeroot
+PATH="/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin:/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/sbin:/workspace/licheepi_nano_sdk/toolchain/gcc-linaro-7.4.1-2019.02-x86_64_arm-linux-gnueabi/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin" FAKEROOTDONTTRYCHOWN=1 /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin/fakeroot -- /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/jffs2/fakeroot
+rootdir=/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/jffs2/target
+table='/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/full_devices_table.txt'
+[7m>>>   Generating filesystem image rootfs.squashfs[27m
+mkdir -p /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/images
+rm -rf /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/squashfs
+mkdir -p /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/squashfs
+rsync -auH --exclude=/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/ /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/squashfs/target
+echo '#!/bin/sh' > /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/squashfs/fakeroot
+echo "set -e" >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/squashfs/fakeroot
+echo "chown -h -R 0:0 /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/squashfs/target" >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/squashfs/fakeroot
+PATH="/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin:/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/sbin:/workspace/licheepi_nano_sdk/toolchain/gcc-linaro-7.4.1-2019.02-x86_64_arm-linux-gnueabi/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin" /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/support/scripts/mkusers /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/full_users_table.txt /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/squashfs/target >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/squashfs/fakeroot
+echo "/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin/makedevs -d /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/full_devices_table.txt /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/squashfs/target" >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/squashfs/fakeroot
+printf '   \n' >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/squashfs/fakeroot
+printf '   \n' >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/squashfs/fakeroot
+printf '   	/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin/mksquashfs /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/squashfs/target /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/images/rootfs.squashfs -noappend -processors 19 -comp gzip\n' >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/squashfs/fakeroot
+chmod a+x /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/squashfs/fakeroot
+PATH="/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin:/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/sbin:/workspace/licheepi_nano_sdk/toolchain/gcc-linaro-7.4.1-2019.02-x86_64_arm-linux-gnueabi/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin" FAKEROOTDONTTRYCHOWN=1 /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin/fakeroot -- /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/squashfs/fakeroot
+rootdir=/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/squashfs/target
+table='/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/full_devices_table.txt'
+Parallel mksquashfs: Using 19 processors
+Creating 4.0 filesystem on /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/images/rootfs.squashfs, block size 131072.
+[===============================================================/] 935/935 100%
+
+Exportable Squashfs 4.0 filesystem, gzip compressed, data block size 131072
+	compressed data, compressed metadata, compressed fragments,
+	compressed xattrs, compressed ids
+	duplicates are removed
+Filesystem size 4900.23 Kbytes (4.79 Mbytes)
+	42.53% of uncompressed filesystem size (11522.01 Kbytes)
+Inode table size 12471 bytes (12.18 Kbytes)
+	24.28% of uncompressed inode table size (51371 bytes)
+Directory table size 16954 bytes (16.56 Kbytes)
+	57.24% of uncompressed directory table size (29619 bytes)
+Number of duplicate files found 0
+Number of inodes 1363
+Number of files 871
+Number of fragments 22
+Number of symbolic links  407
+Number of device nodes 0
+Number of fifo nodes 0
+Number of socket nodes 0
+Number of directories 85
+Number of ids (unique uids + gids) 3
+Number of uids 3
+	root (0)
+	unknown (1000)
+	www-data (33)
+Number of gids 3
+	root (0)
+	unknown (1000)
+	www-data (33)
+[7m>>>   Generating filesystem image rootfs.tar[27m
+mkdir -p /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/images
+rm -rf /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/tar
+mkdir -p /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/tar
+rsync -auH --exclude=/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/target/ /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/tar/target
+echo '#!/bin/sh' > /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/tar/fakeroot
+echo "set -e" >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/tar/fakeroot
+echo "chown -h -R 0:0 /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/tar/target" >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/tar/fakeroot
+PATH="/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin:/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/sbin:/workspace/licheepi_nano_sdk/toolchain/gcc-linaro-7.4.1-2019.02-x86_64_arm-linux-gnueabi/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin" /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/support/scripts/mkusers /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/full_users_table.txt /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/tar/target >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/tar/fakeroot
+echo "/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin/makedevs -d /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/full_devices_table.txt /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/tar/target" >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/tar/fakeroot
+printf '   \n' >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/tar/fakeroot
+printf '   \n' >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/tar/fakeroot
+printf '   	(cd /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/tar/target; find -print0 | LC_ALL=C sort -z | tar  --pax-option=exthdr.name=%%d/PaxHeaders/%%f,atime:=0,ctime:=0 -cf /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/images/rootfs.tar --null --xattrs-include='\''*'\'' --no-recursion -T - --numeric-owner)\n' >> /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/tar/fakeroot
+chmod a+x /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/tar/fakeroot
+PATH="/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin:/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/sbin:/workspace/licheepi_nano_sdk/toolchain/gcc-linaro-7.4.1-2019.02-x86_64_arm-linux-gnueabi/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin" FAKEROOTDONTTRYCHOWN=1 /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/host/bin/fakeroot -- /workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/tar/fakeroot
+rootdir=/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/tar/target
+table='/workspace/licheepi_nano_sdk/buildroot-2021.02.3/buildroot-2021.02.3/output/build/buildroot-fs/full_devices_table.txt'
