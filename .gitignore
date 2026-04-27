@@ -2,7 +2,7 @@
 #       Build artifacts         #
 # ==============================#
 build/
-
+output/
 # Object files
 *.o
 *.obj
