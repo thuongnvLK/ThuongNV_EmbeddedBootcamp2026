@@ -5,6 +5,7 @@
 
 /dts-v1/;
 #include "suniv-f1c100s.dtsi"
+#include <dt-bindings/interrupt-controller/arm-gic.h>
 #include <dt-bindings/gpio/gpio.h>
 
 / {
@@ -149,9 +150,17 @@
 	status = "okay";
 };
 
+//&mmc0 {
+//	status = "okay";
+//	broken-cd;
+//};
+
+// https://github.com/unframework/linux/blob/nano-5.11/arch/arm/boot/dts/suniv-f1c100s-licheepi-nano.dts
 &mmc0 {
-	status = "okay";
+	vmmc-supply = <&reg_vcc3v3>;
+	bus-width = <4>;
 	broken-cd;
+	status = "okay";
 };
 
 &otg_sram {
@@ -192,16 +201,16 @@
 	};
 };
 
-&codec {
-	allwinner,audio-routing =
-		"Headphone", "HP",
-		"Headphone", "HPCOM",
-		"LINEIN", "Line In",
-		"FMINL", "Left FM In",
-		"FMINR", "Right FM In",
-		"MIC", "Mic";
-	status = "okay";
-};
+//&codec {
+//	allwinner,audio-routing =
+//		"Headphone", "HP",
+//		"Headphone", "HPCOM",
+//		"LINEIN", "Line In",
+//		"FMINL", "Left FM In",
+//		"FMINR", "Right FM In",
+//		"MIC", "Mic";
+//	status = "okay";
+//};
 
 &uart0 {
 	pinctrl-names = "default";
