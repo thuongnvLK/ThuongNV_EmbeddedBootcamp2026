@@ -34,6 +34,7 @@
 ## Array
 | Problem Name | Difficulty |
 | ------- | ------- |
+| [0001-two-sum](https://github.com/thuongnvLK/ThuongNV_EmbeddedBootcamp2026/tree/main/0001-two-sum/) | Easy |
 | [0088-merge-sorted-array](https://github.com/thuongnvLK/ThuongNV_EmbeddedBootcamp2026/tree/main/0088-merge-sorted-array/) | Easy |
 ## Two Pointers
 | Problem Name | Difficulty |
@@ -51,4 +52,8 @@
 | Problem Name | Difficulty |
 | ------- | ------- |
 | [0020-valid-parentheses](https://github.com/thuongnvLK/ThuongNV_EmbeddedBootcamp2026/tree/main/0020-valid-parentheses/) | Easy |
+## Hash Table
+| Problem Name | Difficulty |
+| ------- | ------- |
+| [0001-two-sum](https://github.com/thuongnvLK/ThuongNV_EmbeddedBootcamp2026/tree/main/0001-two-sum/) | Easy |
 <!---LeetCode Topics End-->
